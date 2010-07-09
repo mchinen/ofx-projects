@@ -22,6 +22,8 @@ int		myInt6;
 int		myInt7;
 int		myInt8;
 int		myInt9;
+int      myChoice;
+int      myChoice2;
 
 float	myFloat1;
 float	myFloat2;
@@ -65,8 +67,11 @@ void testApp::setup(){
 	// start a new group
 	gui.addTitle("Another group");
 	gui.addSlider("myFloat2", myFloat2, 0.0, 1);
+   gui.addComboBox("DefaultComboBox", myChoice, 12, NULL);
 	gui.addSlider("myInt2", myInt2, 3, 8);
 	gui.addToggle("myBool2", myBool2);	
+   const char* titleArray[] = {"Pick Someone else", "No Pick Me!", "Leave me alone"};
+   gui.addComboBox("myChoice2", myChoice2, 3,  titleArray);
 
 	// new group, this time separate into it's own column
 	gui.addTitle("Yes one more group").setNewColumn(true);
@@ -105,6 +110,7 @@ void testApp::setup(){
 	gui.addSlider("myFloat6", myFloat6, 0.0, 1);
 	gui.addSlider("myFloat9", myFloat9, 0.0, 0.01 ); 
 	gui.addToggle("myBool9", myBool9);	
+   
 	
 	
 	gui.loadFromXML();

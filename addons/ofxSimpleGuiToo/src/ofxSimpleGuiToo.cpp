@@ -385,11 +385,6 @@ ofxSimpleGuiColorPicker &ofxSimpleGuiToo::addColorPicker(string name, float *val
 }
 
 
-ofxSimpleGuiComboBox &ofxSimpleGuiToo::addComboBox(string name, int &choice_out, int numChoices, const char** choiceTitles)  {
-	if(!config) setup();
-	return pages[currentPage]->addComboBox(name, choice_out, numChoices, choiceTitles);
-}
-
 
 //void ofxSimpleGuiToo::setup(ofEventArgs &e) {
 void ofxSimpleGuiToo::update(ofEventArgs &e) {

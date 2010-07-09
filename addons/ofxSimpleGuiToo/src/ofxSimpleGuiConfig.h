@@ -48,7 +48,6 @@ public:
 	float	sliderTextHeight;
 	float	slider2DTextHeight;
 	float	titleHeight;
-   float comboBoxHeight;
 
 	ofPoint padding;
 	ofPoint offset;

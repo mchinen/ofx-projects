@@ -40,7 +40,6 @@ ofxSimpleGuiPage::ofxSimpleGuiPage(string name) : ofxSimpleGuiControl(name) {
 	disableAllEvents();
 	width = 0;
 	height = ofGetHeight();
-   eventStealingControl = NULL;
 	setXMLName(name + "_settings.xml");
 }
 
@@ -115,8 +114,6 @@ void ofxSimpleGuiPage::draw(float x, float y, bool alignRight) {
 		
 	float posX		= 0;
 	float posY		= 0;
-   float stealingX = 0;
-   float stealingY = 0;
 
 	ofSetRectMode(OF_RECTMODE_CORNER);
 
@@ -132,13 +129,7 @@ void ofxSimpleGuiPage::draw(float x, float y, bool alignRight) {
 		float controlX = posX + x;
 		float controlY = posY + y;
 		
-      //we don't draw the event stealing controls until the end because they can expand and overlap with other controls (e.g. combo box)
-      if(eventStealingControl == &control) {
-         stealingX = controlX;
-         stealingY = controlY;
-      } else
-         control.draw(controlX, controlY);
-         
+		control.draw(controlX, controlY);
 		if(control.hasTitle) {
 			ofNoFill();
 			ofSetColor(config->borderColor);
@@ -156,16 +147,6 @@ void ofxSimpleGuiPage::draw(float x, float y, bool alignRight) {
 		//		if(guiFocus == controls[i]->guiID) controls[i]->focused = true;		// MEMO
 		//		else							   controls[i]->focused = false;
 	}
-   //event stealing controls get drawn on top
-   if(eventStealingControl) {
-      eventStealingControl->draw(stealingX, stealingY);
-      if(eventStealingControl->hasTitle) {
-			ofNoFill();
-			ofSetColor(config->borderColor);
-			glLineWidth(0.5f);
-			ofRect(stealingX, stealingY, eventStealingControl->width, eventStealingControl->height);
-		}
-   }
 }
 
 
@@ -221,11 +202,6 @@ ofxSimpleGuiColorPicker &ofxSimpleGuiPage::addColorPicker(string name, float *va
 }
 
 
-ofxSimpleGuiComboBox &ofxSimpleGuiPage::addComboBox(string name, int &choice_out, int numChoices, const char** choiceTitles) {
-	return (ofxSimpleGuiComboBox &)addControl(* new ofxSimpleGuiComboBox(name, choice_out, numChoices, this, choiceTitles));
-}
-
-
 
 
 void ofxSimpleGuiPage::update(ofEventArgs &e) {
@@ -234,31 +210,19 @@ void ofxSimpleGuiPage::update(ofEventArgs &e) {
 
 
 void ofxSimpleGuiPage::mouseMoved(ofMouseEventArgs &e) {
-   if(eventStealingControl) 
-      eventStealingControl->_mouseMoved(e);
-   else
-      for(int i=0; i<controls.size(); i++) controls[i]->_mouseMoved(e);
+	for(int i=0; i<controls.size(); i++) controls[i]->_mouseMoved(e);
 }
 
 void ofxSimpleGuiPage::mousePressed(ofMouseEventArgs &e) {
-   if(eventStealingControl) 
-      eventStealingControl->_mousePressed(e);
-   else
-      for(int i=0; i<controls.size(); i++) controls[i]->_mousePressed(e);
+	for(int i=0; i<controls.size(); i++) controls[i]->_mousePressed(e);
 }
 
 void ofxSimpleGuiPage::mouseDragged(ofMouseEventArgs &e) {
-   if(eventStealingControl) 
-      eventStealingControl->_mouseDragged(e);
-   else
-      for(int i=0; i<controls.size(); i++) controls[i]->_mouseDragged(e);
+	for(int i=0; i<controls.size(); i++) controls[i]->_mouseDragged(e);
 }
 
 void ofxSimpleGuiPage::mouseReleased(ofMouseEventArgs &e) {
-   if(eventStealingControl) 
-      eventStealingControl->_mouseReleased(e);
-   else
-      for(int i=0; i<controls.size(); i++) controls[i]->_mouseReleased(e);
+	for(int i=0; i<controls.size(); i++) controls[i]->_mouseReleased(e);
 }
 
 void ofxSimpleGuiPage::keyPressed(ofKeyEventArgs &e) {
@@ -268,12 +232,4 @@ void ofxSimpleGuiPage::keyPressed(ofKeyEventArgs &e) {
 void ofxSimpleGuiPage::keyReleased(ofKeyEventArgs &e) {
 	for(int i=0; i<controls.size(); i++) controls[i]->_keyReleased(e);
 }
-
-void ofxSimpleGuiPage::SetEventStealingControl(ofxSimpleGuiControl &control) {
-   eventStealingControl = &control;
-}
-void ofxSimpleGuiPage::ReleaseEventStealingControl() {
-   eventStealingControl = NULL;
-}
-
 
